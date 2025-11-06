@@ -5,7 +5,7 @@ fun main() {
     println("asd $a asd")
     var b = 123
     b += 1
-    print(b)
-    val n: String = null
+    println(b)
+    val n: String? = null
     println(n)
 }
