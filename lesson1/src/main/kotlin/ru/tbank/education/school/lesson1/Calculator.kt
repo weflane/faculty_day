@@ -1,7 +1,6 @@
 package ru.tbank.education.school.lesson1
 
 import jdk.dynalink.Operation
-
 /**
  * Метод для вычисления простых арифметических операций.
  */
@@ -24,8 +23,8 @@ fun calculate(a: Double, b: Double, operation: OperationType): Double? {
 @Suppress("ReturnCount")
 fun String.calculate(): Double? {
     val p = this.split(" ")
-    val a = p[0].toDouble()
-    val b = p[2].toDouble()
+    val a = p[0].toDoubleOrNull() ?: return null
+    val b = p[2].toDoubleOrNull() ?: return null
     val operation = when (p[1]) {
         "+" -> OperationType.ADD
         "-" -> OperationType.SUBTRACT
@@ -34,5 +33,12 @@ fun String.calculate(): Double? {
         else -> null
     }
 
-    return calculate(a, b, operation)
+    return operation?.let { calculate(a, b, it) }
+}
+
+fun main() {
+    println("5 + 2".calculate())
+    println("10 * 3".calculate())
+    println("8 / 0".calculate())
+    println("5 - 3".calculate())
 }
