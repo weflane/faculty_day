@@ -51,7 +51,6 @@ abstract class Ticket {
             println("ticket $id is already bought")
             return false
         }
-
         isBought = true
         println("you bought ticket $id")
         return true

@@ -1,26 +1,21 @@
 interface TBankEmployee{
-    fun writeCode()
-    fun deployToProduction()
     fun answerClientCall()
-    fun processLoanRequest()
 }
 
 // каждый из этих классов должен реализовать ВСЕ методы интерфейса
 class Developer(name: String) : TBankEmployee {
-    fun writeCode{
-        println("sfdijfojd")
-    }
+    fun writeCode()
     fun deployToProduction()
-    fun answerClientCall()
+    override fun answerClientCall()
 }
 class SupportOperator(name: String) : TBankEmployee {
     fun writeCode()
-    fun answerClientCall()
+    override fun answerClientCall()
     fun processLoanRequest()
 }
 class LoanManager(name: String) : TBankEmployee {
     fun deployToProduction()
-    fun answerClientCall()
+    override fun answerClientCall()
     fun processLoanRequest()
 }
 
