@@ -77,7 +77,8 @@ db.conf 8
 (где число — количество строк в файле)
 
 ```bash
-wc -l config/*.conf > conf_stats.txt
+echo "app.conf $(wc -l < config/app.conf)" > conf_stats.txt
+echo "db.conf $(wc -l < config/db.conf)" >> conf_stats.txt
 ```
 
 
