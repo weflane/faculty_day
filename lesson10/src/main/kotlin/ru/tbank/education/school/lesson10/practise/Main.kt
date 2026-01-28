@@ -1,6 +1,7 @@
 import java.time.LocalDate
 import java.time.Month
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 fun main() {
     task1()
@@ -13,6 +14,11 @@ fun main() {
     println()
     task5()
     println()
+    task6()
+    println()
+    task7()
+    println()
+    task8()
 }
 
 /*
@@ -92,7 +98,6 @@ fun task3() {
         .sorted()
 
     println("Task 3 repeated words: ${repeated.joinToString(", ")}")
-}
 
 fun task4() {
     val array = arrayOf("A-123", "B-7", "AA-12", "C-001", "D-99x")
@@ -115,9 +120,14 @@ fun task6() {
     val b = a.map { (x, y) ->
         Math.abs(ChronoUnit.DAYS.between(LocalDate.parse(x), LocalDate.parse(y)))
     }
+
     println("Task 6: $a")
 }
 fun task7() {
     val pair = listOf("math:Ivan", "bio:Olga", "math:Max", "bio:Ivan", "cs:Olga").forEach { it.split(":") }
-    math to (Ivan, Max)
+    //math to (Ivan, Max)
+}
+
+fun task8(){
+}
 }
