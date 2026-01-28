@@ -2,6 +2,7 @@ import java.time.LocalDate
 import java.time.Month
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
+import java.time.LocalDateTime
 
 fun main() {
     task1()
@@ -19,6 +20,10 @@ fun main() {
     task7()
     println()
     task8()
+    println()
+    //дз
+    main1()
+    println()
 }
 
 /*
@@ -98,6 +103,7 @@ fun task3() {
         .sorted()
 
     println("Task 3 repeated words: ${repeated.joinToString(", ")}")
+}
 
 fun task4() {
     val array = arrayOf("A-123", "B-7", "AA-12", "C-001", "D-99x")
@@ -123,11 +129,188 @@ fun task6() {
 
     println("Task 6: $a")
 }
+
 fun task7() {
-    val pair = listOf("math:Ivan", "bio:Olga", "math:Max", "bio:Ivan", "cs:Olga").forEach { it.split(":") }
-    //math to (Ivan, Max)
+    val subjects = listOf("math:Ivan", "bio:Olga", "math:Max", "bio:Ivan", "cs:Olga")
+    val result = subjects.map { it.split(":") }.groupBy({ it[0] }, { it[1] })
+    println("Task 7 (using groupBy): $result")
 }
 
 fun task8(){
+    val strings = listOf("Start at 2026/01/22 09:14", "No time here", "End: 22-01-2026 18:05")
+    val results = mutableListOf<String>()
+    val pattern = Regex("""(\d{2,4})[/-](\d{1,2})[/-](\d{2,4})\s+(\d{2}):(\d{2})""")
+    for (str in strings) {
+        val match = pattern.find(str)
+        if (match != null) {
+            val (year, month, day, hour, minute) = match.groupValues.drop(1)
+            val (finalYear, finalMonth, finalDay) = if (year.length == 4) {
+                Triple(year, month, day)
+            } else {
+                Triple(day, month, year)
+            }
+            val formatted = String.format(
+                "%04d-%02d-%02d %02d:%02d",
+                finalYear.toInt(),
+                finalMonth.toInt(),
+                finalDay.toInt(),
+                hour.toInt(),
+                minute.toInt()
+            )
+            results.add(formatted)
+        }
+    }
+    println("Task 8: $results")
 }
+
+
+fun normalize(line: String): Map<String, Any>? {
+    val trimmed = line.trim()
+    val patternA = Regex("""(\d{4})-(\d{2})-(\d{2})\s+(\d{2}):(\d{2}).*?ID\s*:\s*(\d+).*?STATUS\s*:\s*(\w+)""", RegexOption.IGNORE_CASE)
+    val patternB = Regex("""TS\s*=\s*(\d{2})/(\d{2})/(\d{4})-(\d{2}):(\d{2}).*?STATUS?\s*=\s*(\w+).*?#(\d+)""", RegexOption.IGNORE_CASE)
+    val patternC = Regex("""\[(\d{2})\.(\d{2})\.(\d{4})\s+(\d{2}):(\d{2})\].*?(\w+).*?ID?\s*:\s*(\d+)""", RegexOption.IGNORE_CASE)
+
+    val matchA = patternA.find(trimmed)
+    val matchB = patternB.find(trimmed)
+    val matchC = patternC.find(trimmed)
+    val match = matchA ?: matchB ?: matchC
+    if (match == null) return null
+    val year: String
+    val month: String
+    val day: String
+    val hour: String
+    val minute: String
+    val idStr: String
+    val statusStr: String
+    when {
+        matchA != null -> {
+            year = match.groupValues[1]
+            month = match.groupValues[2]
+            day = match.groupValues[3]
+            hour = match.groupValues[4]
+            minute = match.groupValues[5]
+            idStr = match.groupValues[6]
+            statusStr = match.groupValues[7]
+        }
+        matchB != null -> {
+            day = match.groupValues[1]
+            month = match.groupValues[2]
+            year = match.groupValues[3]
+            hour = match.groupValues[4]
+            minute = match.groupValues[5]
+            statusStr = match.groupValues[6]
+            idStr = match.groupValues[7]
+        }
+        else -> {
+            day = match.groupValues[1]
+            month = match.groupValues[2]
+            year = match.groupValues[3]
+            hour = match.groupValues[4]
+            minute = match.groupValues[5]
+            statusStr = match.groupValues[6]
+            idStr = match.groupValues[7]
+        }
+    }
+    val status = when (statusStr.lowercase()) {
+        "sent", "delivered" -> statusStr.lowercase()
+        else -> return null
+    }
+    val dt = String.format("%04d-%02d-%02d %02d:%02d",
+        year.toInt(), month.toInt(), day.toInt(), hour.toInt(), minute.toInt())
+    return mapOf("dt" to dt, "id" to idStr.toInt(), "status" to status)
+}
+
+fun main1() {
+    val logs = listOf(
+        "2026-01-22 09:14 | ID:042 | STATUS:sent",
+        "TS=22/01/2026-09:27; status=delivered; #042",
+        "2026-01-22 09:10 | ID:043 | STATUS:sent",
+        "2026-01-22 09:18 | ID:043 | STATUS:delivered",
+        "TS=22/01/2026-09:05; status=sent; #044",
+        "[22.01.2026 09:40] delivered (id:044)",
+        "2026-01-22 09:20 | ID:045 | STATUS:sent",
+        "[22.01.2026 09:33] delivered (id:045)",
+        "   ts=22/01/2026-09:50; STATUS=Sent; #046   ",
+        " [22.01.2026 10:05]   DELIVERED   (ID:046) "
+    )
+    val normalizedLogs = mutableListOf<Map<String, Any>>()
+    val brokenLogs = mutableListOf<String>()
+    for (log in logs) {
+        val normalized = normalize(log)
+        if (normalized != null) {
+            normalizedLogs.add(normalized)
+        } else {
+            brokenLogs.add(log)
+        }
+    }
+    println("normalized logs: ${normalizedLogs.size}")
+    if (brokenLogs.isNotEmpty()) {
+        println("broken logs: ${brokenLogs.size}")
+    }
+    val groups = mutableMapOf<Int, MutableList<Pair<String, String>>>()
+    for (log in normalizedLogs) {
+        val id = log["id"] as Int
+        val status = log["status"] as String
+        val dtStr = log["dt"] as String
+        if (!groups.containsKey(id)) {
+            groups[id] = mutableListOf()
+        }
+        groups[id]!!.add(status to dtStr)
+    }
+
+    val completeOrders = mutableListOf<Triple<Int, Long, String>>()
+    val incompleteOrders = mutableListOf<Int>()
+    val timeErrorOrders = mutableListOf<Int>()
+    for ((id, events) in groups) {
+        var sentTime: LocalDateTime? = null
+        var deliveredTime: LocalDateTime? = null
+        for ((status, dtStr) in events) {
+            val parts = dtStr.split(" ")
+            val dateParts = parts[0].split("-")
+            val timeParts = parts[1].split(":")
+            val year = dateParts[0].toInt()
+            val month = dateParts[1].toInt()
+            val day = dateParts[2].toInt()
+            val hour = timeParts[0].toInt()
+            val minute = timeParts[1].toInt()
+            val dateTime = LocalDateTime.of(year, month, day, hour, minute)
+            if (status == "sent") {
+                sentTime = dateTime
+            } else {
+                deliveredTime = dateTime
+            }
+        }
+        if (sentTime == null || deliveredTime == null) {
+            incompleteOrders.add(id)
+        } else if (deliveredTime.isBefore(sentTime)) {
+            timeErrorOrders.add(id)
+        } else {
+            val minutes = ChronoUnit.MINUTES.between(sentTime, deliveredTime)
+            completeOrders.add(Triple(id, minutes, "OK"))
+        }
+    }
+    val sortedOrders = completeOrders.sortedByDescending { it.second }
+    println("all IDs")
+    for ((id, minutes, _) in sortedOrders) {
+        println("ID: $id, Time: $minutes minutes")
+    }
+    if (sortedOrders.isNotEmpty()) {
+        val (longestId, longestMinutes, _) = sortedOrders[0]
+        println("\nlongest delivery: ID $longestId ($longestMinutes minutes)")
+    }
+    val violators = sortedOrders.filter { it.second > 20 }
+    println("\nviolations (delivery time > 20 minutes):")
+    if (violators.isEmpty()) {
+        println("no violations found")
+    } else {
+        for ((id, minutes, _) in violators) {
+            println("ID: $id - $minutes minutes")
+        }
+    }
+    if (incompleteOrders.isNotEmpty()) {
+        println("\nincomplete orders: ${incompleteOrders.joinToString(", ")}")
+    }
+    if (timeErrorOrders.isNotEmpty()) {
+        println("\ntime errors: ${timeErrorOrders.joinToString(", ")}")
+    }
 }
