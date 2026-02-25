@@ -1,0 +1,10 @@
+app:
+  service:
+    max-records: 50
+    forbidden-names:
+      - "admin"
+      - "yyy"
+      - "no"
+spring:
+  main:
+    lazy-initialization: true
