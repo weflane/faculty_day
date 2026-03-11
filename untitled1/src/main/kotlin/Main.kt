@@ -83,3 +83,7 @@ suspend fun <T, R> parallelTransform(
         }
     }.awaitAll()
 }
+
+fun main(){
+    println()
+}

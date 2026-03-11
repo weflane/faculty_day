@@ -33,23 +33,23 @@ fun stringLectureExample() {
     println()
 
     // 5. Длина, доступ по индексу
-    println(s1.length)     // 5
-    println(s1[1])         // 'e'
+    println(s1.length) // 5
+    println(s1[1]) // 'e'
 
     println()
 
     // 6. Подстроки
     val text = "Kotlin is awesome"
-    println(text.substring(0, 6))   // Kotlin
+    println(text.substring(0, 6)) // Kotlin
     println(text.substringAfter("is ")) // awesome
 
     println()
 
     // 7. Поиск
     println(text.contains("awesome")) // true
-    println(text.startsWith("Kot"))   // true
-    println(text.endsWith("me"))      // true
-    println(text.indexOf("is"))       // 7
+    println(text.startsWith("Kot")) // true
+    println(text.endsWith("me")) // true
+    println(text.indexOf("is")) // 7
 
     println()
 
@@ -62,9 +62,9 @@ fun stringLectureExample() {
 
     // 9. Trim / strip
     val spaced = "   Kotlin   "
-    println(spaced.trim())        // "Kotlin"
-    println(spaced.trimStart())   // "Kotlin   "
-    println(spaced.trimEnd())     // "   Kotlin"
+    println(spaced.trim()) // "Kotlin"
+    println(spaced.trimStart()) // "Kotlin   "
+    println(spaced.trimEnd()) // "   Kotlin"
 
     println()
 

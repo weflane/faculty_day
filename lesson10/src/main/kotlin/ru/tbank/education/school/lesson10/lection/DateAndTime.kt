@@ -3,11 +3,7 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
 fun dateTimeLectureExample() {
-
-
-
     println(ZoneId.getAvailableZoneIds())
-
 
     // 1. Текущий момент времени (UTC)
     val instant = Instant.now()
@@ -55,7 +51,6 @@ fun dateTimeLectureExample() {
     // 6. Парсинг строк
     val parsedDate = OffsetDateTime.parse("2023-07-23+03:00")
     val parsedDateTime = LocalDateTime.parse("2024-10-02T14:30")
-
 
     ZoneId.getAvailableZoneIds()
 
@@ -109,13 +104,7 @@ fun dateTimeLectureExample() {
     println("Zoned from local: $zonedFromLocal")
     println("Instant from zoned: $instantFromZoned")
 
-
-
-
     println()
-
-
-
 }
 
 fun main() {

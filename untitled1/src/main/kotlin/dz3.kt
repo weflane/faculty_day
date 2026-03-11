@@ -65,22 +65,17 @@ fun main() {
 
     // TODO 3: вызвать каждую функцию и вывести результат
 
-    println("=== GET ALL ===")
     val allPosts = getPosts()
     println(allPosts.take(300) + "...")
 
-    println("\n=== GET ONE ===")
     println(getPost(1))
 
-    println("\n=== CREATE ===")
     val newPost = """{"title": "Мой пост", "body": "Текст поста", "userId": 1}"""
     println(createPost(newPost))
 
-    println("\n=== UPDATE ===")
     val updatedPost = """{"id": 1, "title": "Обновлённый заголовок", "body": "Новый текст", "userId": 1}"""
     println(updatePost(1, updatedPost))
 
-    println("\n=== DELETE ===")
     val deleteCode = deletePost(1)
     println("status: $deleteCode")
 }

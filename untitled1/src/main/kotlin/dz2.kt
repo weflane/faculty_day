@@ -51,20 +51,17 @@ fun main() {
     disableSslVerification()
 
     // TODO 1: GET /posts/1
-    println("=== GET /posts/1 ===")
     val (code1, body1) = sendGet("https://jsonplaceholder.typicode.com/posts/1")
     println("status: $code1")
     println("body: $body1")
 
     // TODO 2: POST /posts
-    println("\n=== POST /posts ===")
     val json = """{"title": "Hello", "body": "World", "userId": 1}"""
     val (code2, body2) = sendPost("https://jsonplaceholder.typicode.com/posts", json)
     println("status: $code2")
     println("body: $body2")
 
     // TODO 3: GET /posts/9999 (несуществующий ресурс)
-    println("\n=== GET /posts/9999 ===")
     val (code3, body3) = sendGet("https://jsonplaceholder.typicode.com/posts/9999")
     if (code3 in 200..299) {
         println("status: $code3")
