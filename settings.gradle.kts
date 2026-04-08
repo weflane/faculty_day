@@ -14,5 +14,5 @@ plugins {
 }
 
 rootProject.name = "faculty_day"
-include("lesson2", "lesson7", "lesson8", "lesson10", "untitled1", "demo")
+include("lesson2", "lesson7", "lesson8", "lesson10", "untitled1", "demo", "fd-hibernate-jpa-student")
 //include("lesson3", "lesson1")
