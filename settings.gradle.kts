@@ -4,8 +4,8 @@ pluginManagement {
         mavenCentral()
     }
     plugins {
-        kotlin("jvm") version "1.9.25" apply false
-        kotlin("plugin.spring") version "1.9.25" apply false
+        kotlin("jvm") version "1.9.22" apply false
+        kotlin("plugin.spring") version "1.9.22" apply false
     }
 }
 
@@ -14,5 +14,5 @@ plugins {
 }
 
 rootProject.name = "faculty_day"
-include("lesson2", "lesson7", "lesson8", "lesson10", "untitled1", "demo", "fd-hibernate-jpa-student")
-//include("lesson3", "lesson1")
+include("lesson2", "lesson7", "lesson8", "lesson10", "untitled1", "demo")
+//include("lesson3", "lesson1", "fd-hibernate-jpa-student")
