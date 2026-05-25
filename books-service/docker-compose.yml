@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  books-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: books-service
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=default
+    restart: unless-stopped
